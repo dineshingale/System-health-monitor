@@ -1,0 +1,13 @@
+# System Health Monitor Configuration - 2025
+monitoring:
+  interval_seconds: 60  # How often to run checks
+  
+thresholds:
+  cpu_percent: 80.0     # Alert if CPU usage is above 80%
+  memory_percent: 85.0  # Alert if RAM usage is above 85%
+  disk_percent: 90.0    # Alert if Disk usage is above 90%
+
+reporting:
+  log_to_file: true
+  report_format: "json" # Options: json, csv, text
+  output_path: "reports/health_report"
