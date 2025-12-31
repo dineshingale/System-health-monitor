@@ -15,19 +15,48 @@ def get_metrics():
     if os_name == "Linux":
         script_path = "src/collectors/linux_metrics.sh"
         os.chmod(script_path, 0o755)
-        result = subprocess.run([f"./{script_path}"], capture_output=True, text=True)
+        try:
+            result = subprocess.run([f"./{script_path}"], capture_output=True, text=True, check=False)
+        except Exception as e:
+            print(f"Error running script: {e}")
+            return None
     elif os_name == "Windows":
         script_path = "src/collectors/win_metrics.ps1"
-        result = subprocess.run(["powershell", "-File", script_path], capture_output=True, text=True)
+        try:
+            # Added ExecutionPolicy Bypass to attempt to fix the permission issue automatically, 
+            # though error handling is still needed.
+            result = subprocess.run(
+                ["powershell", "-ExecutionPolicy", "Bypass", "-File", script_path], 
+                capture_output=True, text=True, check=False
+            )
+        except Exception as e:
+            print(f"Error running script: {e}")
+            return None
     else:
         print(f"Unsupported OS: {os_name}")
         return None
 
+    if result.returncode != 0:
+        print(f"Collector script failed with code {result.returncode}:")
+        print(result.stderr)
+        return None
+
     raw_data = result.stdout.strip()
+    if not raw_data:
+        print("Collector script returned no data.")
+        return None
+
     metrics = {}
     for item in raw_data.split(','):
-        key, value = item.split(':')
-        metrics[key] = float(value)
+        item = item.strip()
+        if not item:
+            continue
+        try:
+            key, value = item.split(':')
+            metrics[key.strip()] = float(value.strip())
+        except ValueError:
+            print(f"Skipping malformed metric item: '{item}'")
+            continue
     return metrics
 
 def check_alerts(metrics, config):
