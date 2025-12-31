@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Health Monitor</title>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6 font-sans">
+    
+    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-indigo-600 p-8 text-white text-center">
+            <h1 class="text-3xl font-bold mb-2">System Health Monitor</h1>
+            <p class="text-indigo-100">Real-time Server Metrics & Alerts</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-8">
+            
+            <!-- Actions -->
+            <div class="flex justify-center mb-8">
+                <button id="check-btn" 
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                    <span id="btn-text">Check System Health</span>
+                    <svg id="btn-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Status Indicator -->
+            <div id="status-container" class="hidden mb-8 text-center p-4 rounded-lg">
+                <span id="status-badge" class="inline-block px-4 py-1 rounded-full text-sm font-bold tracking-wide uppercase"></span>
+                <p id="timestamp" class="text-gray-500 text-sm mt-2"></p>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div id="metrics-grid" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- CPU -->
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center">
+                    <h3 class="text-gray-500 font-medium mb-2">CPU Usage</h3>
+                    <div class="text-4xl font-bold text-gray-800" id="cpu-val">--%</div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                        <div id="cpu-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Memory -->
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center">
+                    <h3 class="text-gray-500 font-medium mb-2">Memory Usage</h3>
+                    <div class="text-4xl font-bold text-gray-800" id="mem-val">--%</div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                        <div id="mem-bar" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Disk -->
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center">
+                    <h3 class="text-gray-500 font-medium mb-2">Disk Usage</h3>
+                    <div class="text-4xl font-bold text-gray-800" id="disk-val">--%</div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                        <div id="disk-bar" class="bg-pink-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div id="alerts-section" class="hidden">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Active Alerts</h3>
+                <ul id="alerts-list" class="space-y-2">
+                    <!-- Alerts injected here -->
+                </ul>
+            </div>
+            
+            <!-- Error Message -->
+             <div id="error-message" class="hidden text-center text-red-600 bg-red-50 p-4 rounded-lg border border-red-200"></div>
+
+        </div>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
