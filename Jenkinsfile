@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Injecting VITE_API_URL for the frontend to communicate with backend
         VITE_API_URL = "http://localhost:8000"
-        EMAIL_TO = "dineshingale12@gmail.com"
+        EMAIL_TO = "dineshingale2003@gmail.com"
     }
 
     stages {
