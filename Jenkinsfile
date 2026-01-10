@@ -11,6 +11,12 @@ pipeline {
         stage('Test') {
             steps {
                 script {
+                    // Clean up workspace from previous runs to prevent artifact accumulation
+                    try {
+                        bat "if exist screenshots rmdir /s /q screenshots"
+                        bat "if exist test-results.xml del test-results.xml"
+                    } catch (Exception e) {}
+
                     // Remove existing container if it exists (ignoring errors if not found)
                     try {
                         bat "docker rm -f test-runner"
