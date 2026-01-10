@@ -22,6 +22,7 @@ cd ..
 
 # Wait for Frontend to be ready (checking port 5173)
 echo "Waiting for Frontend to be ready on port 5173..."
+sleep 5
 timeout 60 bash -c 'until echo > /dev/tcp/localhost/5173; do sleep 1; done'
 
 # Run E2E Tests
