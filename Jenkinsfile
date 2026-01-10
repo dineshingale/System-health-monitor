@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Injecting VITE_API_URL for the frontend to communicate with backend
         VITE_API_URL = "http://localhost:8000"
-        EMAIL_TO = "dineshingale12@gmail.com"
+        EMAIL_TO = "dineshingale2003@gmail.com"
     }
 
     stages {
@@ -61,14 +61,27 @@ pipeline {
 
         stage('Merge') {
             when {
-                expression { return env.BRANCH_NAME != 'main' }
+                expression { return env.BRANCH_NAME != 'main' && env.BRANCH_NAME != null }
             }
             steps {
                 script {
                     echo "Tests passed. Merging to main..."
-                    bat "git checkout main"
-                    bat "git merge ${env.BRANCH_NAME}"
-                    bat "git push origin main"
+                    // Double check to ensure we don't merge a null branch
+                    if (env.BRANCH_NAME) {
+                        try {
+                            bat "git checkout main"
+                            bat "git merge ${env.BRANCH_NAME}"
+                            bat "git push origin main"
+                        } catch (Exception e) {
+                            echo "Merge failed: ${e.getMessage()}"
+                            // Optional: Fail the build or just warn? 
+                            // Letting it pass if merge fails might be safer for now to avoid blocking CI on simple conflicts
+                            // But usually we want to know. Re-throwing to fail.
+                            throw e 
+                        }
+                    } else {
+                        echo "BRANCH_NAME is null, skipping merge."
+                    }
                 }
             }
         }
