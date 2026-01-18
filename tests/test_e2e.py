@@ -16,7 +16,8 @@ def test_system_health_check_flow():
     chrome_options.add_argument("--window-size=1920,1080")
 
     # Ensure screenshot directory exists
-    os.makedirs("/tmp/screenshots", exist_ok=True)
+    screenshots_dir = os.path.join(os.getcwd(), "screenshots")
+    os.makedirs(screenshots_dir, exist_ok=True)
 
     driver = webdriver.Chrome(options=chrome_options)
     
@@ -63,12 +64,12 @@ def test_system_health_check_flow():
         print("Health Check performed successfully and results displayed.")
         
         # Capture Success Screenshot
-        driver.save_screenshot("/tmp/screenshots/success_health_check.png")
+        driver.save_screenshot(os.path.join(screenshots_dir, "success_health_check.png"))
         
     except Exception as e:
         print(f"Test Failed: {e}")
         # Capture Failure Screenshot
-        driver.save_screenshot("/tmp/screenshots/failure_error.png")
+        driver.save_screenshot(os.path.join(screenshots_dir, "failure_error.png"))
         raise e
         
     finally:
